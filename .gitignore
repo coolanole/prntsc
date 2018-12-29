@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Macos
+.DS_Store
+
 # C extensions
 *.so
 
@@ -102,3 +105,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# PyCharm
+.idea/
+
+#
+screenshots/*
+build/*
+
+!.gitignore
+!/**/.gitkeep
