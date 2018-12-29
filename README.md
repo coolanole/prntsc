@@ -24,6 +24,13 @@ To run this script, Python 2.7 or later must be installed on your computer.
 $ python app.py
 ```
 
+## Work with threads
+To increase the speed of data processing, you can use threads.  
+```bash
+$ python app.py --threads 2
+```
+
+
 ## Work with a proxy
 The script supports work through a proxy. To do this, create a file with a list of your proxies and run the script passing the path to the file as an argument. Each proxy server must be written with a new line.
 ```bash

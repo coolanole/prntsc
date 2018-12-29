@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from threading import Thread
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-t', '--threads', type=int, default=5, help='sets the number of threads')
+parser.add_argument('-t', '--threads', type=int, default=0, help='sets the number of threads')
 parser.add_argument('-p', '--proxy', type=str, default=None, help='')
 parser.add_argument('-T', '--timeout', type=int, default=1,
                     help='you can tell to stop waiting for a response after a given number of seconds with the timeout parameter')
@@ -139,6 +139,9 @@ prntsc = Lightshot()
 
 bcolors.warning("Search started in %s threads..." % args.threads)
 
-for x in range(args.threads):
-    thread = Thread(target=prntsc.run)
-    thread.start()
+if args.threads > 1:
+    for x in range(args.threads):
+        thread = Thread(target=prntsc.run)
+        thread.start()
+else:
+    prntsc.run()
