@@ -6,6 +6,7 @@ from threading import Thread
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--threads', type=int, default=5, help='sets the number of threads')
 parser.add_argument('-p', '--proxy', type=str, default=None, help='')
+parser.add_argument('-T', '--timeout', type=int, default=1, help='you can tell to stop waiting for a response after a given number of seconds with the timeout parameter')
 args = parser.parse_args()
 
 
@@ -24,11 +25,14 @@ class Lightshot(object):
         try:
             with open(args.proxy) as f:
                 lines = f.read().splitlines()
+                lines = [line for line in lines if line]
 
             if len(lines) < 1:
                 return result
 
             line = random.choice(lines)
+
+            bcolors.info("We use a proxy server: %s" % line)
 
             result = {
                 "http": line,
@@ -50,8 +54,13 @@ class Lightshot(object):
 
     def getScreenshot(self):
         url = "https://prnt.sc/%s" % self.generateLink()
-        proxies = self.getProxy() if not args.proxy is None else {}
-        r = requests.get(url, headers=self.getHeader(), proxies=proxies)
+
+        try:
+            r = requests.get(url, headers=self.getHeader(), proxies=self.getProxy() if not args.proxy is None else {}, timeout=args.timeout)
+        except Exception as e:
+            bcolors.fail("Connection error, more detailed information is available in the log.")
+            return
+
         bcolors.info("Trying to find a screenshot: %s" % url)
         screenshot = self.parseResponse(r.text)
 
@@ -123,6 +132,8 @@ prntsc = Lightshot()
 
 bcolors.warning("Search started in %s threads..." % args.threads)
 
-for x in range(args.threads):
-    thread = Thread(target=prntsc.run)
-    thread.start()
+prntsc.run()
+
+# for x in range(args.threads):
+#     thread = Thread(target=prntsc.run)
+#     thread.start()
