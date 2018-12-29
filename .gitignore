@@ -114,4 +114,4 @@ screenshots/*
 build/*
 
 !.gitignore
-!/**/.gitkeep%
+!/**/.gitkeep
