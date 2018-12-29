@@ -1,9 +1,9 @@
-import random, requests, urllib2, urlparse, os
+import random, requests, urllib2, urlparse, os, sys
 from bs4 import BeautifulSoup
 from threading import Thread
 
 # Number of threads in which screenshots will be searched
-threads = 2
+threads = 2 if len(sys.argv) < 2 else int(sys.argv[1])
 
 
 class Lightshot(object):
@@ -101,4 +101,3 @@ bcolors.warning("Search started in %s threads..." % threads)
 for x in range(threads):
     thread = Thread(target=prntsc.run)
     thread.start()
-
