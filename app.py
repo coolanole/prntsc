@@ -23,7 +23,7 @@ class Lightshot(object):
     def getScreenshot(self):
         url = "https://prnt.sc/%s" % self.generateLink()
         r = requests.get(url, headers=self.getHeader())
-        # print("Link:%s - %s" % (url, r.status_code))
+        bcolors.info("Trying to find a screenshot: %s" % url)
         screenshot = self.parseResponse(r.text)
 
         if screenshot:
@@ -55,8 +55,37 @@ class Lightshot(object):
         except Exception as e:
             pass
         else:
-            print(" [~] Downloaded: %s" % url)
+            bcolors.success("The screenshot was downloaded successfully: %s" % url)
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+    @staticmethod
+    def success(message):
+        print bcolors.OKGREEN + "[>] " + message + bcolors.ENDC
+
+    @staticmethod
+    def fail(message):
+        print bcolors.FAIL + "[!] " + message + bcolors.ENDC
+
+    @staticmethod
+    def warning(message):
+        print bcolors.WARNING + "[~] " + message + bcolors.ENDC
+
+    @staticmethod
+    def info(message):
+        print bcolors.OKBLUE + "[~] " + message + bcolors.ENDC
+
+
+bcolors.warning("Getting download screenshots...")
 
 prntsc = Lightshot()
 
