@@ -1,5 +1,9 @@
 import random, requests, urllib2, urlparse, os
 from bs4 import BeautifulSoup
+from threading import Thread
+
+# Number of threads in which screenshots will be searched
+threads = 2
 
 
 class Lightshot(object):
@@ -57,6 +61,10 @@ class Lightshot(object):
         else:
             bcolors.success("The screenshot was downloaded successfully: %s" % url)
 
+    def run(self):
+        while True:
+            self.getScreenshot()
+
 
 class bcolors:
     HEADER = '\033[95m'
@@ -86,8 +94,11 @@ class bcolors:
 
 
 bcolors.warning("Getting download screenshots...")
-
 prntsc = Lightshot()
 
-while True:
-    prntsc.getScreenshot()
+bcolors.warning("Search started in %s threads..." % threads)
+
+for x in range(threads):
+    thread = Thread(target=prntsc.run)
+    thread.start()
+
