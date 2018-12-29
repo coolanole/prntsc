@@ -24,5 +24,11 @@ To run this script, Python 2.7 or later must be installed on your computer.
 $ python app.py
 ```
 
+## Work with a proxy
+The script supports work through a proxy. To do this, create a file with a list of your proxies and run the script passing the path to the file as an argument. Each proxy server must be written with a new line.
+```bash
+$ python app.py --proxy proxy.txt
+```
+
 ## Contributing
 Contributions of all sizes are welcome, you can also help by [reporting bugs](https://github.com/coolanole/prntsc/issues).

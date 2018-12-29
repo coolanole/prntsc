@@ -1,9 +1,12 @@
-import random, requests, urllib2, urlparse, os, sys
+# -*- coding: utf-8 -*-
+import random, requests, urllib2, urlparse, os, sys, argparse
 from bs4 import BeautifulSoup
 from threading import Thread
 
-# Number of threads in which screenshots will be searched
-threads = 2 if len(sys.argv) < 2 else int(sys.argv[1])
+parser = argparse.ArgumentParser()
+parser.add_argument('-t', '--threads', type=int, default=5, help='sets the number of threads')
+parser.add_argument('-p', '--proxy', type=str, default=None, help='')
+args = parser.parse_args()
 
 
 class Lightshot(object):
@@ -14,6 +17,27 @@ class Lightshot(object):
         return {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0",
         }
+
+    def getProxy(self):
+        result = {}
+
+        try:
+            with open(args.proxy) as f:
+                lines = f.read().splitlines()
+
+            if len(lines) < 1:
+                return result
+
+            line = random.choice(lines)
+
+            result = {
+                "http": line,
+                "https": line,
+            }
+        except Exception as e:
+            pass
+
+        return result
 
     def generateLink(self, length=6):
         link = ""
@@ -26,7 +50,8 @@ class Lightshot(object):
 
     def getScreenshot(self):
         url = "https://prnt.sc/%s" % self.generateLink()
-        r = requests.get(url, headers=self.getHeader())
+        proxies = self.getProxy() if not args.proxy is None else {}
+        r = requests.get(url, headers=self.getHeader(), proxies=proxies)
         bcolors.info("Trying to find a screenshot: %s" % url)
         screenshot = self.parseResponse(r.text)
 
@@ -96,8 +121,8 @@ class bcolors:
 bcolors.warning("Getting download screenshots...")
 prntsc = Lightshot()
 
-bcolors.warning("Search started in %s threads..." % threads)
+bcolors.warning("Search started in %s threads..." % args.threads)
 
-for x in range(threads):
+for x in range(args.threads):
     thread = Thread(target=prntsc.run)
     thread.start()
