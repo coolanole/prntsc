@@ -1,9 +1,11 @@
-import random, requests, urllib2, urlparse, os, sys
+# -*- coding: utf-8 -*-
+import random, requests, urllib2, urlparse, os, sys, argparse
 from bs4 import BeautifulSoup
 from threading import Thread
 
-# Number of threads in which screenshots will be searched
-threads = 2 if len(sys.argv) < 2 else int(sys.argv[1])
+parser = argparse.ArgumentParser()
+parser.add_argument('-t', '--threads', type=int, default=5, help='sets the number of threads')
+args = parser.parse_args()
 
 
 class Lightshot(object):
@@ -96,8 +98,8 @@ class bcolors:
 bcolors.warning("Getting download screenshots...")
 prntsc = Lightshot()
 
-bcolors.warning("Search started in %s threads..." % threads)
+bcolors.warning("Search started in %s threads..." % args.threads)
 
-for x in range(threads):
+for x in range(args.threads):
     thread = Thread(target=prntsc.run)
     thread.start()
