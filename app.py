@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-import random, requests, urllib2, urlparse, os, sys, argparse
+import random, requests, urllib2, urlparse, os, sys, argparse, logging
 from bs4 import BeautifulSoup
 from threading import Thread
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--threads', type=int, default=5, help='sets the number of threads')
 parser.add_argument('-p', '--proxy', type=str, default=None, help='')
-parser.add_argument('-T', '--timeout', type=int, default=1, help='you can tell to stop waiting for a response after a given number of seconds with the timeout parameter')
+parser.add_argument('-T', '--timeout', type=int, default=1,
+                    help='you can tell to stop waiting for a response after a given number of seconds with the timeout parameter')
 args = parser.parse_args()
+
+logging.basicConfig(filename="error.log",
+                    format=u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
+                    level=logging.DEBUG)
 
 
 class Lightshot(object):
@@ -56,9 +61,11 @@ class Lightshot(object):
         url = "https://prnt.sc/%s" % self.generateLink()
 
         try:
-            r = requests.get(url, headers=self.getHeader(), proxies=self.getProxy() if not args.proxy is None else {}, timeout=args.timeout)
+            r = requests.get(url, headers=self.getHeader(), proxies=self.getProxy() if not args.proxy is None else {},
+                             timeout=args.timeout)
         except Exception as e:
             bcolors.fail("Connection error, more detailed information is available in the log.")
+            logging.error(e)
             return
 
         bcolors.info("Trying to find a screenshot: %s" % url)
@@ -91,7 +98,7 @@ class Lightshot(object):
             with open("screenshots/%s" % self.getFilename(url), "wb") as f:
                 f.write(datatowrite)
         except Exception as e:
-            pass
+            logging.error(e)
         else:
             bcolors.success("The screenshot was downloaded successfully: %s" % url)
 
@@ -132,8 +139,6 @@ prntsc = Lightshot()
 
 bcolors.warning("Search started in %s threads..." % args.threads)
 
-prntsc.run()
-
-# for x in range(args.threads):
-#     thread = Thread(target=prntsc.run)
-#     thread.start()
+for x in range(args.threads):
+    thread = Thread(target=prntsc.run)
+    thread.start()
