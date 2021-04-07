@@ -17,7 +17,7 @@ urllib3==1.24.1
 altgraph==0.16.1
 auto-py-to-exe==2.5.0
 beautifulsoup4==4.6.3
-bottle==0.12.16
+bottle==0.12.19
 bottle-websocket==0.2.9
 certifi==2018.11.29
 chardet==3.0.4
