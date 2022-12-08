@@ -1,14 +1,14 @@
 beautifulsoup4==4.6.3
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 requests==2.21.0
 urllib3==1.24.1
 beautifulsoup4==4.6.3
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 requests==2.21.0
 urllib3==1.24.1beautifulsoup4==4.6.3
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 cx-Freeze==5.1.1
 idna==2.8
@@ -19,7 +19,7 @@ auto-py-to-exe==2.5.0
 beautifulsoup4==4.6.3
 bottle==0.12.20
 bottle-websocket==0.2.9
-certifi==2018.11.29
+certifi==2022.12.7
 chardet==3.0.4
 cx-Freeze==5.1.1
 dis3==0.1.2
